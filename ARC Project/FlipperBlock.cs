@@ -15,12 +15,13 @@ namespace Celeste.Mod.TwigHelper.Entities
         bool renderBG = false;
 
         public string MoveSFX, MoveEndSFX;
+        private bool chaosMode = false;
 
         public FlipperBlock(EntityData data, Vector2 offset) : base(data.Position + offset, data.Width, data.Height, true)
         {
             MoveSFX = data.Attr("moveSFX", "event:/game/05_mirror_temple/swapblock_move");
             MoveEndSFX = data.Attr("moveEndSFX", "event:/game/05_mirror_temple/swapblock_move_end");
-
+            chaosMode = data.Bool("chaosMode", defaultValue: false);
             directory = data.Attr("directory", "objects/swapblock");
             if (directory == "objects/swapblock")
             {
@@ -114,13 +115,33 @@ namespace Celeste.Mod.TwigHelper.Entities
                 return;
             }
         }
-
+        public bool isGrabbing = false;
         public override void Update()
         {
             base.Update();
-            if(TwigModule.GetPlayer() != null && Input.GrabCheck)
+            if (!chaosMode)
             {
-                OnGrab();
+                if (TwigModule.GetPlayer() != null && !Input.Grab.Check)
+                {
+                    if (isGrabbing)
+                    {
+                        OnGrab();
+                    }
+                    isGrabbing = false;
+                }
+                if (TwigModule.GetPlayer() != null && Input.Grab.Check && !isGrabbing)
+                {
+                    if (!isGrabbing) OnGrab();
+                    isGrabbing = true;
+                }
+
+            }
+            if (chaosMode)
+            {
+                if (TwigModule.GetPlayer() != null && Input.Grab.Check)
+                {
+                    OnGrab();
+                }
             }
             if (returnTimer > 0f)
             {

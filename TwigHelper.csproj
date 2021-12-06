@@ -31,7 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ArcadeCollab\FlipperBlock.cs" />
+    <Compile Include="ARC Project\FlipperBlock.cs" />
+    <Compile Include="ARC Project\SnakeBlock.cs" />
     <Compile Include="CardController.cs" />
     <Compile Include="CasinoBlock.cs" />
     <Compile Include="CornerBerry.cs" />
