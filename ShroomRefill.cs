@@ -75,11 +75,10 @@ namespace Celeste.Mod.TwigHelper.Entities
 			p_shatter = P_ShatterTwo;
 			p_regen = P_RegenTwo;
 			p_glow = P_GlowTwo;
-			Add(outline = new Image(GFX.Game["objects/refillCandy/outline"]));
+			Add(outline = new Image(GFX.Game["objects/mushroomThing/outline"]));
 			outline.CenterOrigin();
 			outline.Visible = false;
 			Add(sprite = TwigModule.spriteBank.Create("shroomy"));
-			sprite.Scale = 2* Vector2.One;
 			sprite.Play("idle");
 			sprite.CenterOrigin();
 			Add(wiggler = Wiggler.Create(1f, 4f, delegate (float v)
@@ -110,7 +109,6 @@ namespace Celeste.Mod.TwigHelper.Entities
 
 		public override void Update()
 		{
-			outline.Visible = false;
 			base.Update();
 			if (respawnTimer > 0f)
 			{
@@ -134,8 +132,7 @@ namespace Celeste.Mod.TwigHelper.Entities
 				outline.Visible = false;
 				base.Depth = -100;
 				wiggler.Start();
-				Audio.Play("event:/new_content/game/10_farewell/pinkdiamond_return", Position);
-				sprite.Scale = Vector2.One * 2;
+				Audio.Play("event:/TwigHelper/diamond_return", Position);
 			}
 		}
 
@@ -159,7 +156,7 @@ namespace Celeste.Mod.TwigHelper.Entities
 
 		private void OnPlayer(Player player)
 		{
-			Audio.Play("event:/new_content/game/10_farewell/pinkdiamond_touch", Position);
+			Audio.Play("event:/TwigHelper/diamond_touch", Position);
 			Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
 			Collidable = false;
 			Add(new Coroutine(RefillRoutine(player)));

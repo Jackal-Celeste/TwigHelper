@@ -24,6 +24,10 @@ using System.Reflection;
     public static int DarkMatterState;
     public static int FlagBoosterState;
 
+    private float lowSpeedTimer = 0.2f;
+    private static Color ShroomHairColor = Calc.HexToColor("f20024");
+    private static Color ShroomDashTrailColor = Calc.HexToColor("f22745");
+
     public override Type SessionType => typeof(TwigHelperSession);
 
     public static TwigHelperSession Session => (TwigHelperSession)Instance._Session;
@@ -32,8 +36,6 @@ using System.Reflection;
     {
         Instance = this;
     }
-
-
 
 
     private static void onUpdateLevelStartDashes(On.Celeste.Session.orig_UpdateLevelStartDashes orig, Session self)
@@ -68,6 +70,46 @@ using System.Reflection;
         orig.Invoke(self, position, spriteMode);
         DarkMatterState = self.StateMachine.AddState(DarkMatter.DarkMatterUpdate, DarkMatter.DarkMatterCoroutine, DarkMatter.DarkMatterBegin, DarkMatter.DarkMatterEnd);
         //FlagBoosterState = self.StateMachine.AddState(FlagBooster.FlagDashUpdate, FlagBooster.FlagDashCoroutine, FlagBooster.FlagDashBegin, FlagBooster.FlagDashEnd);
+    }
+
+    public Color onGetHairColor(On.Celeste.PlayerHair.orig_GetHairColor orig, PlayerHair self, int index)
+    {
+        if (Session.HasShroomDash)
+        {
+            return ShroomHairColor;
+        }
+        else
+        {
+            return orig.Invoke(self, index);
+        }
+    }
+
+    private void onPlayerRender(On.Celeste.Player.orig_Render orig, Player self)
+    {
+        orig.Invoke(self);
+        if (Session.HasShroomDash || Session.ShroomDashTrailActive)
+        {
+            Vector2 scale = new Vector2(Math.Abs(self.Sprite.Scale.X) * (float)self.Facing, self.Sprite.Scale.Y);
+            TrailManager.Add(self, scale, ShroomDashTrailColor);
+        }
+    }
+
+    private void onPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
+    {
+        // Use player walk speed as a lower bound
+        if (self.Speed.X < 64f)
+        {
+            lowSpeedTimer -= Engine.DeltaTime;
+            if (lowSpeedTimer < 0f)
+            {
+                Session.ShroomDashTrailActive = false;
+            }
+        }
+        else
+        {
+            lowSpeedTimer = 0.2f;
+        }
+        orig.Invoke(self);
     }
     public static Player GetPlayer()
     {
@@ -156,6 +198,9 @@ using System.Reflection;
         //On.Celeste.Player.StartDash += Player_StartDash;
         On.Celeste.Player.OnCollideH += OnCollideHAltered;
         On.Celeste.Player.OnCollideV += OnCollideVAltered;
+        On.Celeste.Player.Render += onPlayerRender;
+        On.Celeste.Player.Update += onPlayerUpdate;
+        On.Celeste.PlayerHair.GetHairColor += onGetHairColor;
         On.Celeste.Spring.BounceAnimate += changeCharacter;
         On.Celeste.Session.UpdateLevelStartDashes += onUpdateLevelStartDashes;
         On.Celeste.Level.Reload += onLevelReload;
@@ -173,7 +218,12 @@ using System.Reflection;
         if (Session.HasShroomDash)
         {
             Session.ShroomDashActive = true;
+            Session.ShroomDashTrailActive = true;
             self.Speed *= 1.25f;
+        }
+        else
+        {
+            Session.ShroomDashTrailActive = false;
         }
         orig.Invoke(self);
     }
@@ -213,6 +263,9 @@ using System.Reflection;
         //On.Celeste.Player.StartDash -= Player_StartDash;
         On.Celeste.Player.OnCollideH -= OnCollideHAltered;
         On.Celeste.Player.OnCollideV -= OnCollideVAltered;
+        On.Celeste.Player.Render -= onPlayerRender;
+        On.Celeste.Player.Update -= onPlayerUpdate;
+        On.Celeste.PlayerHair.GetHairColor -= onGetHairColor;
         //On.Celeste.PlayerSprite.ctor -= CustomPlayerSprite;
         On.Celeste.Spring.BounceAnimate -= changeCharacter;
         On.Celeste.Session.UpdateLevelStartDashes -= onUpdateLevelStartDashes;
