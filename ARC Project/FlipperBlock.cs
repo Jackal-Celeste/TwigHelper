@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System;
 
-namespace Celeste.Mod.TwigHelper.Entities
+namespace TwigHelper.ARC_Project
 {
     [CustomEntity("TwigHelper/FlipperBlock")]
     [Tracked(false)]

@@ -31,8 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ARC Project\1984Trigger.cs" />
+    <Compile Include="ARC Project\Edward.cs" />
+    <Compile Include="ARC Project\EdwardTherian.cs" />
     <Compile Include="ARC Project\FlipperBlock.cs" />
-    <Compile Include="ARC Project\SnakeBlock.cs" />
+    <Compile Include="ARC Project\SnakeBlockBody.cs" />
+    <Compile Include="ARC Project\SnakeBlockHead.cs" />
+    <Compile Include="ARC Project\SnakeBlockRotate.cs" />
+    <Compile Include="ARC Project\SnakeBlockTail.cs" />
     <Compile Include="CardController.cs" />
     <Compile Include="CasinoBlock.cs" />
     <Compile Include="CornerBerry.cs" />
@@ -94,6 +100,7 @@
       <HintPath>..\..\..\..\MonoMod.Utils.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

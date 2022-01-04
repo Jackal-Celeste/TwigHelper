@@ -79,6 +79,8 @@ public class TwigHelperSession : EverestModuleSession
 		set;
 	} = false;
 
+	public float lastEdward { get; set; } = 0f;
+
 
 	public bool ShroomDashActive
 	{

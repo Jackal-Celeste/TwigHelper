@@ -12,9 +12,9 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using TwigHelper.ARC_Project;
 
-
-    public class TwigModule : EverestModule
+public class TwigModule : EverestModule
     {
     public static TwigModule Instance;
 
@@ -23,6 +23,7 @@ using System.Reflection;
     public static SpriteBank spriteBank2;
     public static int DarkMatterState;
     public static int FlagBoosterState;
+    public static int EdwardState { get; private set; }
 
     public override Type SessionType => typeof(TwigHelperSession);
 
@@ -67,7 +68,7 @@ using System.Reflection;
     {
         orig.Invoke(self, position, spriteMode);
         DarkMatterState = self.StateMachine.AddState(DarkMatter.DarkMatterUpdate, DarkMatter.DarkMatterCoroutine, DarkMatter.DarkMatterBegin, DarkMatter.DarkMatterEnd);
-        //FlagBoosterState = self.StateMachine.AddState(FlagBooster.FlagDashUpdate, FlagBooster.FlagDashCoroutine, FlagBooster.FlagDashBegin, FlagBooster.FlagDashEnd);
+        EdwardState = self.StateMachine.AddState(Edward.EdwardUpdate, Edward.EdwardCoroutine, Edward.EdwardBegin, Edward.EdwardEnd);
     }
     public static Player GetPlayer()
     {
