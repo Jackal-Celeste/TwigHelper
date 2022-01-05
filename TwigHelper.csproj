@@ -35,6 +35,7 @@
     <Compile Include="ARC Project\Edward.cs" />
     <Compile Include="ARC Project\EdwardTherian.cs" />
     <Compile Include="ARC Project\FlipperBlock.cs" />
+    <Compile Include="ARC Project\ElectricBlock.cs" />
     <Compile Include="ARC Project\SnakeBlockBody.cs" />
     <Compile Include="ARC Project\SnakeBlockHead.cs" />
     <Compile Include="ARC Project\SnakeBlockRotate.cs" />
