@@ -203,7 +203,6 @@ namespace TwigHelper.ARC_Project
 		public override void Update()
 		{
 			base.Update();
-			Console.WriteLine(TwigModule.GetPlayer()?.Facing);
 			if (state != 0)
 			{
 				sprite.Position = Calc.Approach(sprite.Position, spriteOffset, 32f * Engine.DeltaTime);
@@ -247,7 +246,7 @@ namespace TwigHelper.ARC_Project
 					if (base.Scene.Entities.FindFirst<Lightning>() == null || base.X > (Scene as Level).Bounds.Right)
 					{
 						//TwigModule.GetPlayer().Facing = launchSpeedX > 0 ? Facings.Right : Facings.Left;
-						TwigModule.GetLevel().Add(new EdwardTherian(Position, null));
+						TwigModule.GetLevel().Add(new EdwardTherian(Position));
 						sprite.Scale.X = 1f;
 						state = States.Leaving;
 						Add(new Coroutine(LeaveRoutine()));

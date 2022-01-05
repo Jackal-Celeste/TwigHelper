@@ -8,38 +8,8 @@ using Monocle;
 [Tracked(false)]
 public class EdwardTherian : Actor
 {
-	public static ParticleType P_Attack;
-
-	public static ParticleType P_HitWall;
-
-	public static ParticleType P_Stomp;
-
-	public static ParticleType P_Regen;
-
-	public static ParticleType P_BreakOut;
 
 	public static readonly Color TrailColor = Calc.HexToColor("3d0407");
-
-	private const int StIdle = 0;
-
-	private const int StSpotted = 2;
-
-	private const int StAttack = 3;
-
-	private const int size = 12;
-
-	private const int bounceWidth = 16;
-
-	private const int bounceHeight = 4;
-
-	private const float Accel = 600f;
-
-	private const float WallCollideStunThreshold = 100f;
-
-	private const float StunXSpeed = 100f;
-
-	private const float SightDistSq = 25600f;
-
 
 	private Hitbox physicsHitbox;
 
@@ -79,12 +49,6 @@ public class EdwardTherian : Actor
 
 	private int pathIndex;
 
-	private Vector2[] patrolPoints;
-
-	private SineWave idleSineX;
-
-	private SineWave idleSineY;
-
 	public VertexLight Light;
 
 	private bool dead;
@@ -112,13 +76,67 @@ public class EdwardTherian : Actor
 	private bool attackWindUp;
 
 
+	[Pooled]
+	private class BreakDebris : Entity
+	{
+		private Image sprite;
+
+		private Vector2 speed;
+
+		private float percent;
+
+		private float duration;
+
+		public BreakDebris()
+		{
+			Add(sprite = new Image(Calc.Random.Choose(GFX.Game.GetAtlasSubtextures("objects/edward/new/explode/limbs"))));
+			sprite.CenterOrigin();
+		}
+
+		public BreakDebris Init(Vector2 position, Vector2 direction)
+		{
+			Depth = -1000;
+			Position = position;
+			Visible = true;
+
+			direction = Calc.AngleToVector(direction.Angle() + Calc.Random.Range(-0.1f, 0.1f), 1f);
+			direction.X += Calc.Random.Range(-0.3f, 0.3f);
+			direction.Normalize();
+			speed = direction * Calc.Random.Range(140, 180);
+			percent = 0f;
+			// COLOURSOFNOISE: Calc.Random.Range(2, 3) would only ever return 2
+			duration = Calc.Random.Range(2, 4);
+			return this;
+		}
+
+		public override void Update()
+		{
+			base.Update();
+			if (percent >= 1f)
+			{
+				RemoveSelf();
+				return;
+			}
+			Position += speed * Engine.DeltaTime;
+			speed.X = Calc.Approach(speed.X, 0f, 180f * Engine.DeltaTime);
+			speed.Y += 200f * Engine.DeltaTime;
+			percent += Engine.DeltaTime / duration;
+			sprite.Color = Color.White * (1f - percent);
+		}
+
+		public override void Render()
+		{
+			sprite.DrawOutline(Color.Black);
+			base.Render();
+		}
+	}
+
 	private Vector2 FollowTarget => lastSpottedAt - Vector2.UnitY * 2f;
 
-	public EdwardTherian(Vector2 position, Vector2[] patrolPoints)
+	public EdwardTherian(Vector2 position)
 		: base(position)
 	{
 		base.Depth = -200;
-		this.patrolPoints = patrolPoints;
 		lastPosition = position;
 		base.Collider = (physicsHitbox = new Hitbox(6f, 6f, -3f, -3f));
 		breakWallsHitbox = new Hitbox(6f, 14f, -3f, -7f);
@@ -132,8 +150,6 @@ public class EdwardTherian : Actor
 		State.SetCallbacks(3, AttackUpdate, AttackCoroutine, AttackBegin);
 		onCollideH = OnCollideH;
 		onCollideV = OnCollideV;
-		Add(idleSineX = new SineWave(0.5f, 0f));
-		Add(idleSineY = new SineWave(0.7f, 0f));
 		Add(Light = new VertexLight(Color.White, 1f, 32, 64));
 		Add(new MirrorReflection());
 		path = new List<Vector2>();
@@ -347,6 +363,7 @@ public class EdwardTherian : Actor
 
 	private void SlammedIntoWall(CollisionData data)
 	{
+		Vector2 spd = Speed;
 		float direction;
 		float x;
 		if (data.Direction.X > 0f)
@@ -393,7 +410,15 @@ public class EdwardTherian : Actor
 		Entity e = new Entity(Position);
 		Scene.Add(e);
 		DeathEffect d = new DeathEffect(Color.DarkRed, base.Center - Position);
-		e.Add(d);
+		for (int x1 = -24; x1 < 24; x1 += 8)
+		{
+			for (int y = -24; y < 24; y += 8)
+			{
+				TwigModule.GetLevel()?.Add(Engine.Pooler.Create<BreakDebris>().Init(new Vector2(Position.X + x, Position.Y + y), -spd));
+				//player.Die(Vector2.Zero);
+			}
+		}
+		//e.Add(d);
 		RemoveSelf();
 		e.RemoveSelf();
 	}

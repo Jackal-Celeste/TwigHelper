@@ -36,6 +36,7 @@
     <Compile Include="ARC Project\EdwardTherian.cs" />
     <Compile Include="ARC Project\FlipperBlock.cs" />
     <Compile Include="ARC Project\ElectricBlock.cs" />
+    <Compile Include="ARC Project\LazerCrystal.cs" />
     <Compile Include="ARC Project\SnakeBlockBody.cs" />
     <Compile Include="ARC Project\SnakeBlockHead.cs" />
     <Compile Include="ARC Project\SnakeBlockRotate.cs" />
@@ -114,6 +115,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="temp.jl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
