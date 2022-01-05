@@ -40,11 +40,9 @@
     <Compile Include="ARC Project\SnakeBlockHead.cs" />
     <Compile Include="ARC Project\SnakeBlockRotate.cs" />
     <Compile Include="ARC Project\SnakeBlockTail.cs" />
-    <Compile Include="CardController.cs" />
-    <Compile Include="CasinoBlock.cs" />
-    <Compile Include="CornerBerry.cs" />
-    <Compile Include="DarkMatterController.cs" />
-    <Compile Include="ReverseXMatter.cs" />
+    <Compile Include="WinterCollab\CornerBerry.cs" />
+    <Compile Include="WinterCollab\DarkMatterController.cs" />
+    <Compile Include="WinterCollab\ReverseXMatter.cs" />
     <Compile Include="WinterCollab\DarkMatter.cs" />
     <Compile Include="WinterCollab\DarkMatterRenderer.cs" />
     <Compile Include="WinterCollab\XMLRefill.cs" />
@@ -56,9 +54,6 @@
     <Compile Include="TwigModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WinterCollab\VentSpring.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Celeste, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
