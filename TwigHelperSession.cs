@@ -87,4 +87,10 @@ public class TwigHelperSession : EverestModuleSession
 		get;
 		set;
 	} = false;
+
+	public bool ShroomDashTrailActive
+	{
+		get;
+		set;
+	} = false;
 }
