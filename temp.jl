@@ -1,56 +1,24 @@
-﻿module TwigHelperCrystalLazer
+﻿module TwigHelperInkrail
 
 using ..Ahorn, Maple
 
-@mapdef Entity "TwigHelper/CrystalLazerUp" CrystalLazerUp(x::Integer, y::Integer, 0, delay::Number=0.5, duration::Number=0.5, length::Integer=16, flag::String="sample_flag")
-@mapdef Entity "TwigHelper/CrystalLazerDown" CrystalLazerDown(x::Integer, y::Integer, 1, delay::Number=0.5, duration::Number=0.5, length::Integer=16, flag::String="sample_flag")
-@mapdef Entity "TwigHelper/CrystalLazerRight" CrystalLazerRight(x::Integer, y::Integer, 2,delay::Number=0.5, duration::Number=0.5, length::Integer=16, flag::String="sample_flag")
-@mapdef Entity "TwigHelper/CrystalLazerLeft" CrystalLazerLeft(x::Integer, y::Integer, 3,delay::Number=0.5, duration::Number=0.5, length::Integer=16, flag::String="sample_flag")
+@mapdef Entity "TwigHelper/Inkrail" Inkrail(x::Integer, y::Integer, launchSpeed::Number=240.0, decayRate::Number=1.0, xSineAmplitude::Number=0.0, xSineFrequency::Number=0.0, ySineAmplitude::Number=0.0, ySineFrequency::Number=0.0, overrideDashes::Bool=false, dashes::Integer=1, canJumpFromBooster::Bool=false, tint::String="ffffff")
+
 
 const placements = Ahorn.PlacementDict(
-    "Crystal Lazer (Up, Twig Helper)" => Ahorn.EntityPlacement(
-        CrystalLazerUp
-    ),
-    "Crystal Lazer (Down, Twig Helper)" => Ahorn.EntityPlacement(
-        CrystalLazerDown
-    ),
-    "Crystal Lazer (Right, Twig Helper)" => Ahorn.EntityPlacement(
-        CrystalLazerRight
-    ),
-    "Crystal Lazer (Left, Twig Helper)" => Ahorn.EntityPlacement(
-        CrystalLazerLeft
-    ),
+   "Inkrail (WIP, Cursed) (Twig Helper)" => Ahorn.EntityPlacement(
+	  Inkrail,
+	  "point"
+   )
 )
 
-function Ahorn.selection(entity::CrystalLazerUp)
-    x, y = Ahorn.position(entity)
+sprite = "objects/boosterBase/boosterBase00"
 
-    return Ahorn.Rectangle(x - 6, y - 3, 12, 5)
+function Ahorn.selection(entity::Inkrail)
+    x, y = Ahorn.position(entity)
+    return Ahorn.getSpriteRectangle(sprite, x, y)
 end
 
-function Ahorn.selection(entity::CrystalLazerDown)
-    x, y = Ahorn.position(entity)
-
-    return Ahorn.Rectangle(x - 6, y, 12, 5)
-end
-
-function Ahorn.selection(entity::CrystalLazerLeft)
-    x, y = Ahorn.position(entity)
-
-    return Ahorn.Rectangle(x - 1, y - 6, 5, 12)
-end
-
-function Ahorn.selection(entity::CrystalLazerRight)
-    x, y = Ahorn.position(entity)
-
-    return Ahorn.Rectangle(x - 4, y - 6, 5, 12)
-end
-
-sprite = "danger/CrystalLazer/crystal_up_00.png"
-
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::CrystalLazerUp, room::Maple.Room) = Ahorn.drawSprite(ctx, sprite, 0, -8)
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::CrystalLazerDown, room::Maple.Room) = Ahorn.drawSprite(ctx, sprite, 16, 24, rot=pi)
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::CrystalLazerLeft, room::Maple.Room) = Ahorn.drawSprite(ctx, sprite, 24, 0, rot=pi / 2)
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::CrystalLazerRight, room::Maple.Room) = Ahorn.drawSprite(ctx, sprite, -8, 16, rot=-pi / 2)
+Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::Inkrail, room::Maple.Room) = Ahorn.drawSprite(ctx, sprite, 0, 0)
 
 end

@@ -25,6 +25,7 @@ namespace TwigHelper.ARC_Project
 
 			this.head = parent;
 			Add(i = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple_stem1"]));
+			if (head.fast) i.Color = Color.OrangeRed;
 			this.Depth = -11501;
 		}
 
@@ -35,10 +36,12 @@ namespace TwigHelper.ARC_Project
 		public override void Added(Scene scene)
 		{
 			base.Added(scene);
+			if (head.fast) i.Color = Color.OrangeRed;
 		}
 
 		public override void Render()
 		{
+			if (head.fast) i.Color = Color.OrangeRed;
 			base.Render();
 		}
 		public override void Update()

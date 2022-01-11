@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Celeste.Mod;
 using Celeste.Mod.TwigHelper.Entities;
+using Microsoft.Xna.Framework;
+using TwigHelper.ARC_Project;
 
 public class TwigHelperSession : EverestModuleSession
 {
@@ -93,4 +95,8 @@ public class TwigHelperSession : EverestModuleSession
 		get;
 		set;
 	} = false;
+
+	public Inkrail lastInkrail { get; set; } = null;
+	public Vector2 lastInkrailPos { get; set; } = Vector2.Zero;
+
 }

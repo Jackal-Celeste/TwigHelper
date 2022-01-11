@@ -36,12 +36,14 @@ namespace TwigHelper.ARC_Project
 			initDir = head.directionVector;
 			dupeDir = head.direction;
 			Add(image = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple1"]));
-			
+			if (head.fast) image.Color = Color.OrangeRed;
+
 		}
 
 
 		public override void Update()
         {
+			if (head.fast) image.Color = Color.OrangeRed;
 			if (!large)
 			{
 				if (head.directionVector.Y == 0f && Math.Abs(head.Position.X - Position.X) < head.Width)
@@ -92,9 +94,11 @@ namespace TwigHelper.ARC_Project
 					head.inactive = true;
 					Remove(image);
 					Add(image = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple2"]));
-					foreach(SnakeBlockBody n in head.list){
+					if (head.fast) image.Color = Color.OrangeRed;
+					foreach (SnakeBlockBody n in head.list){
 						n.Remove(n.i);
 						n.Add(n.i = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple_stem2"]));
+						if (head.fast) n.i.Color = Color.OrangeRed;
 					}
 				}
             }
@@ -105,13 +109,15 @@ namespace TwigHelper.ARC_Project
 				Speed = liftSpd;
 			}
 			base.Update();
+			if (head.fast) image.Color = Color.OrangeRed;
 		}
 
 
-		public void changeDirection()
+		public void changeDirection(bool left)
 		{
-			liftSpd = liftSpd.Rotate((float)Math.PI / 2f);
-			dupeDir = (Directions)(((int)dupeDir + 3) % 4);
+			liftSpd = liftSpd.Rotate((float)(Math.PI / 2 * (left ? 1 : -1)));
+			int l = left ? 3 : 1;
+			dupeDir = (Directions)(((int)dupeDir + l) % 4);
 		}
 	}
 

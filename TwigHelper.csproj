@@ -32,15 +32,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ARC Project\1984Trigger.cs" />
+    <Compile Include="ARC Project\AutoRunTrigger.cs" />
     <Compile Include="ARC Project\Edward.cs" />
     <Compile Include="ARC Project\EdwardTherian.cs" />
     <Compile Include="ARC Project\FlipperBlock.cs" />
     <Compile Include="ARC Project\ElectricBlock.cs" />
+    <Compile Include="ARC Project\Inkrail.cs" />
+    <Compile Include="ARC Project\InkrailBoost.cs" />
     <Compile Include="ARC Project\LazerCrystal.cs" />
     <Compile Include="ARC Project\SnakeBlockBody.cs" />
     <Compile Include="ARC Project\SnakeBlockHead.cs" />
     <Compile Include="ARC Project\SnakeBlockRotate.cs" />
     <Compile Include="ARC Project\SnakeBlockTail.cs" />
+    <Compile Include="ARC Project\UndirectedGraph.cs" />
     <Compile Include="WinterCollab\CornerBerry.cs" />
     <Compile Include="WinterCollab\DarkMatterController.cs" />
     <Compile Include="WinterCollab\ReverseXMatter.cs" />

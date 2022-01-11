@@ -39,7 +39,7 @@ namespace TwigHelper.ARC_Project
                 {
 					sprites[i, j] = TwigModule.spriteBank.Create("electricBlock");
 					sprites[i, j].Position += (offset + new Vector2(j * 8, i * 8));
-					sprites[i, j].Play("idle" + (i % 4 + 1).ToString());
+					sprites[i, j].Play("idle" + ((Position.Y/8 + i) % 4 + 1).ToString());
 					eSprites.Add(sprites[i, j]);
 				}
             }

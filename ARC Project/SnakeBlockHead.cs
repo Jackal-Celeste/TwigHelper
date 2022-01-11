@@ -69,10 +69,13 @@ namespace TwigHelper.ARC_Project
 		public Vector2 initPos;
 		public Image i;
 		public bool inactive = true;
+		public int length;
+		public bool fast = false;
 
-		public SnakeBlock(Vector2 position, int width, int height, Directions direction, float speed)
+		public SnakeBlock(Vector2 position, int width, int height, Directions direction, float speed, int length)
 			: base(position, width, height, safe: false)
 		{
+			this.length = Math.Abs(length);
 			base.Depth = -11503;
 			startPosition = initPos = position;
 			this.direction = direction;
@@ -95,10 +98,12 @@ namespace TwigHelper.ARC_Project
 			Add(new Coroutine(Controller()));
 			Add(new LightOcclude(0.5f));
 			Add(i = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple2"]));
+			fast = targetSpeed > 60;
+			if (fast) i.Color = Color.OrangeRed;
 		}
 
 		public SnakeBlock(EntityData data, Vector2 offset)
-			: this(data.Position + offset, data.Width, data.Height, data.Enum("direction", Directions.Left), data.Float("speed", 60f))
+			: this(data.Position + offset, data.Width, data.Height, data.Enum("direction", Directions.Left), data.Float("speed", defaultValue: 60f), data.Int("length", defaultValue: 3))
 		{
 		}
 
@@ -114,6 +119,7 @@ namespace TwigHelper.ARC_Project
 			Remove(i);
 			inactive = false;
 			Add(i = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple1"]));
+			if (fast) i.Color = Color.OrangeRed;
 		}
 
 		public SnakeBlockTail tail = null;
@@ -155,6 +161,7 @@ namespace TwigHelper.ARC_Project
                     {
 						Remove(i);
 						Add(i = new Image(GFX.Game["objects/snakeBlock/Left/snek_simple2"]));
+						if (fast) i.Color = Color.OrangeRed;
 					}
 
 					bool hit = false;
@@ -224,7 +231,7 @@ namespace TwigHelper.ARC_Project
 						list.Add(n);
 						TwigModule.GetLevel().Add(n);
 						initPos = Position;
-						if (list.Count > 3 /* magic number, add functionality later*/)
+						if (list.Count > length)
 						{
 							SnakeBlockBody m = list[0];
 							list.RemoveAt(0);
@@ -301,14 +308,25 @@ namespace TwigHelper.ARC_Project
 			{
 				snakeBlocks.ForEach(entity => entity.Collidable = true);
 			}
+			if (fast) i.Color = Color.OrangeRed;
 		}
 
-		public void changeDirection()
+		public void changeDirection(bool left)
 		{
-			directionVector = directionVector.Rotate((float)Math.PI / 2f);
+			
+			directionVector = directionVector.Rotate((float)(Math.PI / 2* (left ? 1:-1)));
+			Player player = TwigModule.GetPlayer();
 			if (directionVector.Y > 0 && HasPlayerOnTop())
 			{
-				TwigModule.GetPlayer().Position.Y -= 1f;
+				player.Position.Y -= 1f;
+			}
+			else if(directionVector.X > 0 && HasPlayerClimbing() && player?.Facing == Facings.Right)
+            {
+				player.Position.X -= 1f;
+            }
+			else if (directionVector.X < 0 && HasPlayerClimbing() && player?.Facing == Facings.Left)
+			{
+				player.Position.X += 1f;
 			}
 
 		}

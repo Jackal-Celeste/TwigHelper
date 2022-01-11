@@ -23,6 +23,7 @@ public class TwigModule : EverestModule
     public static SpriteBank spriteBank2;
     public static int DarkMatterState;
     public static int FlagBoosterState;
+    public static int InkrailState;
     public static int EdwardState { get; private set; }
 
     private float lowSpeedTimer = 0.2f;
@@ -71,6 +72,7 @@ public class TwigModule : EverestModule
         orig.Invoke(self, position, spriteMode);
         DarkMatterState = self.StateMachine.AddState(DarkMatter.DarkMatterUpdate, DarkMatter.DarkMatterCoroutine, DarkMatter.DarkMatterBegin, DarkMatter.DarkMatterEnd);
         EdwardState = self.StateMachine.AddState(Edward.EdwardUpdate, Edward.EdwardCoroutine, Edward.EdwardBegin, Edward.EdwardEnd);
+        InkrailState = self.StateMachine.AddState(InkrailBoost.Update, InkrailBoost.Coroutine, InkrailBoost.Begin, InkrailBoost.End);
     }
 
     public Color onGetHairColor(On.Celeste.PlayerHair.orig_GetHairColor orig, PlayerHair self, int index)
