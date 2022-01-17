@@ -42,7 +42,8 @@ namespace TwigHelper.ARC_Project
                 player.DummyMoving = true;
                 player.Speed.X = Calc.Approach(player.Speed.X, 100f, 8000f * Engine.DeltaTime);
                 player.Facing = Facings.Right;
-                if (player.CollideCheck<Solid>(player.CenterRight + new Vector2(-1f,0f)) && !Input.GrabCheck) right = false;
+                if (Input.Jump.Pressed && player.CollideCheck<Solid>(player.CenterRight + new Vector2(-1f, 0f)) && !Input.GrabCheck) right = false;
+                else if (player.CollideCheck<Solid>(player.CenterRight + new Vector2(-1f, 0f)) && player.OnGround() && !Input.GrabCheck) right = false;
                 player.DummyMoving = false;
             }
             else
@@ -50,7 +51,8 @@ namespace TwigHelper.ARC_Project
                 player.DummyMoving = true;
                 player.Speed.X = Calc.Approach(player.Speed.X, -100f, 8000f * Engine.DeltaTime);
                 player.Facing = Facings.Left;
-                if (player.CollideCheck<Solid>(player.CenterLeft + new Vector2(1f, 0f)) && !Input.GrabCheck) right = true;
+                if (Input.Jump.Pressed && player.CollideCheck<Solid>(player.CenterLeft + new Vector2(1f, 0f)) && !Input.GrabCheck) right = true;
+                else if (player.CollideCheck<Solid>(player.CenterLeft + new Vector2(1f, 0f)) && player.OnGround() && !Input.GrabCheck) right = true;
                 player.DummyMoving = false;
             }
         }

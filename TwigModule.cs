@@ -1,6 +1,7 @@
 ﻿using Celeste;
 using Celeste.Mod;
 using Celeste.Mod.JackalCollabHelper.Entities;
+using Celeste.Mod.TwigHelper;
 using Celeste.Mod.TwigHelper.Entities;
 using JackalCollabHelper;
 using Microsoft.Xna.Framework;
@@ -29,6 +30,8 @@ public class TwigModule : EverestModule
     private float lowSpeedTimer = 0.2f;
     private static Color ShroomHairColor = Calc.HexToColor("f20024");
     private static Color ShroomDashTrailColor = Calc.HexToColor("f22745");
+    public override Type SettingsType => typeof(TwigModuleSettings);
+    public static TwigModuleSettings Settings => (TwigModuleSettings)Instance._Settings;
 
     public override Type SessionType => typeof(TwigHelperSession);
 

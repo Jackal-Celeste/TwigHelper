@@ -99,4 +99,6 @@ public class TwigHelperSession : EverestModuleSession
 	public Inkrail lastInkrail { get; set; } = null;
 	public Vector2 lastInkrailPos { get; set; } = Vector2.Zero;
 
+	public BossNode currentBossNode { get; set; } = null;
+
 }
