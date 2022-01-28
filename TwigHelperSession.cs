@@ -101,4 +101,6 @@ public class TwigHelperSession : EverestModuleSession
 
 	public BossNode currentBossNode { get; set; } = null;
 
+	public bool inDDRZone { get; set; } = false;
+
 }

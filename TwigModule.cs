@@ -136,6 +136,7 @@ public class TwigModule : EverestModule
         }
         catch (NullReferenceException)
         {
+            return new Level();
             return null;
         }
     }
@@ -231,7 +232,43 @@ public class TwigModule : EverestModule
         {
             Session.ShroomDashTrailActive = false;
         }
+        if(TwigModule.Session.inDDRZone){
+            Vector2 aim = new DynData<Player>(self).Get<Vector2>("lastAim");
+            aim.Normalize();
+            aim.EightWayNormal();
+            DDRTrigger d = TwigModule.GetLevel().Tracker.GetNearestEntity<DDRTrigger>(self.Position);
+            if (!d.disabled)
+            {
+                if (GetAim(aim) != d.dirs[d.index])
+                {
+                    self.Die(Vector2.Zero);
+                }
+                else
+                {
+                    d.index++;
+                }
+            }
+        }
         orig.Invoke(self);
+    }
+
+    private DDRTrigger.Directions GetAim(Vector2 a)
+    {
+        int b = -1;
+        if(a.X == 0)
+        {
+            b = (a.Y < 0) ? 0 : 4;
+        }
+        else if(a.X > 0)
+        {
+            b = (a.Y < 0) ? 7 : (a.Y == 0) ? 6 : 5;
+        }
+        else
+        {
+            b = (a.Y < 0) ? 1 : (a.Y == 0) ? 2 : 3;
+        }
+        
+        return (DDRTrigger.Directions)b;
     }
 
     private void ShroomDashEnd(On.Celeste.Player.orig_DashEnd orig, Player self)

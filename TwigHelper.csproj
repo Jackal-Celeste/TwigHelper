@@ -34,6 +34,7 @@
     <Compile Include="ARC Project\1984Trigger.cs" />
     <Compile Include="ARC Project\AutoRunTrigger.cs" />
     <Compile Include="ARC Project\BossNode.cs" />
+    <Compile Include="ARC Project\DDRTrigger.cs" />
     <Compile Include="ARC Project\Edward.cs" />
     <Compile Include="ARC Project\EdwardTherian.cs" />
     <Compile Include="ARC Project\FazerBlaster.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="ARC Project\SnakeBlockHead.cs" />
     <Compile Include="ARC Project\SnakeBlockRotate.cs" />
     <Compile Include="ARC Project\SnakeBlockTail.cs" />
+    <Compile Include="ARC Project\Test.cs" />
     <Compile Include="ARC Project\UndirectedGraph.cs" />
     <Compile Include="TwigModuleSettings.cs" />
     <Compile Include="WinterCollab\CornerBerry.cs" />

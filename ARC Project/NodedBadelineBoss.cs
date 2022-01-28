@@ -93,14 +93,8 @@ namespace TwigHelper.ARC_Project
 
 	private void CreateBossSprite()
 	{
-		Add(Sprite = GFX.SpriteBank.Create("badeline_boss"));
-		Sprite.OnFrameChange = delegate(string anim)
-		{
-			if (anim == "idle" && Sprite.CurrentAnimationFrame == 18)
-			{
-				Audio.Play("event:/char/badeline/boss_idle_air", Position);
-			}
-		};
+		Add(Sprite = TwigModule.spriteBank.Create("cryobot_boss"));
+			Sprite.Play("idleBoss");
 		facing = -1;
 	}
 
@@ -205,11 +199,7 @@ namespace TwigHelper.ARC_Project
 					StartAttacking();
 				}
 			}
-			if (!Moving)
-			{
-				sprite.Position = avoidPos + new Vector2(floatSine.Value * 3f, floatSine.ValueOverTwo * 4f);
-			}
-			else
+			if(sprite != null)
 			{
 				sprite.Position = Calc.Approach(sprite.Position, Vector2.Zero, 12f * Engine.DeltaTime);
 			}
@@ -235,14 +225,14 @@ namespace TwigHelper.ARC_Project
 			}
 			avoidPos = Calc.Approach(avoidPos, target, 40f * Engine.DeltaTime);
 		}
-		light.Position = sprite.Position + new Vector2(0f, -10f);
+		if(Sprite != null) light.Position = sprite.Position + new Vector2(0f, -10f);
 	}
 
 	public override void Render()
 	{
 		if (Sprite != null)
 		{
-			Sprite.Scale.X = facing;
+			Sprite.Scale.X = -facing;
 			Sprite.Scale.Y = 1f;
 			Sprite.Scale *= 1f + scaleWiggler.Value * 0.2f;
 		}
@@ -263,7 +253,6 @@ namespace TwigHelper.ARC_Project
 		{
 			CreateBossSprite();
 		}
-		Sprite.Play("getHit");
 		Audio.Play("event:/char/badeline/boss_hug", Position);
 		Collidable = false;
 		avoidPos = Vector2.Zero;
@@ -275,11 +264,12 @@ namespace TwigHelper.ARC_Project
 
 		private IEnumerator MoveSequence(Player player)
 		{
+			Sprite.Play("bossLunge");
 			level.Shake();
-			yield return 0.3f;
+			yield return 0.2f;
 			Vector2 from = node.Position;
 			Vector2 to = goTo.Position;
-			float duration = Vector2.Distance(from, to) / 600f;
+			float duration = Vector2.Distance(from, to) / 400f;
 			float dir = (to - from).Angle();
 			Tween tween4 = Tween.Create(Tween.TweenMode.Oneshot, Ease.SineInOut, duration, start: true);
 			tween4.OnUpdate = delegate (Tween t)
@@ -293,7 +283,6 @@ namespace TwigHelper.ARC_Project
 			};
 			tween4.OnComplete = delegate
 			{
-				Sprite.Play("recoverHit");
 				Moving = false;
 				Collidable = true;
 				Player entity = Scene.Tracker.GetEntity<Player>();

@@ -158,7 +158,7 @@ namespace TwigHelper.ARC_Project
 			Player entity = scene.Tracker.GetEntity<Player>();
 			if (entity != null && entity.X > base.X)
 			{
-				RemoveSelf();
+				//RemoveSelf();
 			}
 		}
 

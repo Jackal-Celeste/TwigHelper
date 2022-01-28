@@ -57,14 +57,35 @@ namespace TwigHelper.ARC_Project
 			return smol;
         }
 
+		public static Vector2 GetClosest(Inkrail n, Vector2 aim, Player p)
+		{
+			Vector2[] proxies = new Vector2[n.neighbors.Count];
+			int closestIndex = 0;
+			for (int i = 0; i < proxies.Length; i++)
+			{
+				Vector2 offset = n.neighbors[i].Position - n.Position;
+				offset.Normalize();
+				offset *= 10;
+				proxies[i] = n.Position + offset;
+			}
+			for (int i = 1; i < proxies.Length; i++)
+			{
+
+				float a0 = Vector2.Distance(proxies[closestIndex], aim);
+				float a1 = Vector2.Distance(proxies[i], aim);
+				if (a1 < a0) closestIndex = i;
+			}
+			return  n.neighbors[closestIndex].Position - p.Position;
+		}
+
 		public static IEnumerator Coroutine()
 		{
 			yield return 0.25f;
 			dir = (Input.Aim.Value == Vector2.Zero ? Vector2.UnitX : Input.Aim.Value);
-			Inkrail[] positions = TwigModule.Session.lastInkrail.neighbors.ToArray();
-			dir = positions[0].Position - TwigModule.Session.lastInkrailPos;
+			dir = GetClosest(TwigModule.Session.lastInkrail, dir, TwigModule.GetPlayer());
 			//dir = findClosest(dir, positions);
 			dir.Normalize();
+			dir *= 2;
 			//dir = findClosest(dir, TwigModule.Session.lastInkrail.neighbors);
 			Player player = TwigModule.GetPlayer();
 			if (dyn == null)

@@ -418,7 +418,7 @@ public class EdwardTherian : Actor
 				//player.Die(Vector2.Zero);
 			}
 		}
-		//e.Add(d);
+		e.Add(d);
 		RemoveSelf();
 		e.RemoveSelf();
 	}
@@ -433,14 +433,7 @@ public class EdwardTherian : Actor
 				return;
 			}
 		}
-		if ((State.State == 3 || State.State == 5) && Math.Abs(Speed.X) >= 100f)
-		{
-			SlammedIntoWall(data);
-		}
-		else
-		{
-			Speed.X *= -0.2f;
-		}
+		SlammedIntoWall(data);
 	}
 
 	private void OnCollideV(CollisionData data)
@@ -506,18 +499,9 @@ public class EdwardTherian : Actor
 
 	private int SpottedUpdate()
 	{
-		if (!canSeePlayer)
-		{
-			spottedLosePlayerTimer -= Engine.DeltaTime;
-			if (spottedLosePlayerTimer < 0f)
-			{
-				return 0;
-			}
-		}
-		else
-		{
+
 			spottedLosePlayerTimer = 0.6f;
-		}
+		
 		float speedMagnitude = GetSpeedMagnitude(60f);
 		Vector2 vector = ((!lastPathFound) ? (FollowTarget - base.Center).SafeNormalize(speedMagnitude) : GetPathSpeed(speedMagnitude));
 		if (Vector2.DistanceSquared(base.Center, FollowTarget) < 2500f && base.Y < FollowTarget.Y)
@@ -544,7 +528,7 @@ public class EdwardTherian : Actor
 		{
 			TurnFacing(Speed.X, "spotted");
 		}
-		return 2;
+		return 3;
 	}
 
 	private IEnumerator SpottedCoroutine()
@@ -566,10 +550,6 @@ public class EdwardTherian : Actor
 		if (!attackWindUp)
 		{
 			Vector2 vector = (FollowTarget - base.Center).SafeNormalize();
-			if (Vector2.Dot(Speed.SafeNormalize(), vector) < 0.4f)
-			{
-				return 5;
-			}
 			attackSpeed = Calc.Approach(attackSpeed, 720f, 400f * Engine.DeltaTime);
 			Speed = Speed.RotateTowards(vector.Angle(), 1.5f * Engine.DeltaTime).SafeNormalize(attackSpeed);
 			if (base.Scene.OnInterval(0.04f))
